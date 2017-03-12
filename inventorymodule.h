@@ -11,9 +11,8 @@ using namespace std;
 
 class Inventory
 {
-	class Book;
 private:
-	Book inventory[100];
+	Book books[100];
 	ifstream bookList;
 public:
 	void FileToArray(Book inventory, ifstream bookList)
