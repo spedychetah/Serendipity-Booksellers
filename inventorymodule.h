@@ -7,14 +7,14 @@
 #include <iostream>
 
 using namespace std;
-
-
 class Inventory
 {
 private:
-	Book books[100];
-	ifstream bookList;
+	Book inventory[100];
+	fstream bookList;
 public:
+	InventoryModule()
+	void inventoryDriver();
 	void FileToArray(Book inventory, ifstream bookList)
 	{
 		bookList.open("Booklist.txt");
