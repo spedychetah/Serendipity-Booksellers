@@ -10,12 +10,34 @@ using namespace std;
 class Inventory
 {
 private:
-	Book inventory[100];
-	fstream bookList;
+	int arrsize = 100;
+	Book inventory[arrsize];
 public:
-	InventoryModule()
-	void inventoryDriver();
-	void FileToArray(Book inventory, ifstream bookList)
+	InventoryModule(){}
+	void setArraySize(int);
+	void inventoryDriver()
+	{
+		int choice;
+		do{
+			choice = displayInvenu();
+			if(choice == 1)
+			if (choice == 2)
+			if (choice == 3)
+			if (choice == 4)
+		}while(choice != 5);
+	}
+	int displayInvenu(){
+		int entry;
+		cout << "Inventory Database Menu:\n";
+		cout << "1) Look up a book\n";
+		cout << "2) Edit a book\n";
+		cout << "3) Add a book\n";
+		cout << "4) Delete a book\n";
+		cout << "5) Return to Main Menu\n";
+		cout << "Enter your choice: ";
+		cin >> entry;
+	}
+	void FileToArray(fstream &bookList)
 	{
 		bookList.open("Booklist.txt");
 		//need to skip the first line before readings(headings)
@@ -32,7 +54,7 @@ public:
 		} //OR: Until you hit '\n', continue to read in values. These eight set values will be used for Book One.
 			//Then. move on to the next line of the file, and read until '\n' again, assigning these new values to our 8 variables.
 	}
-	void ArrayToFile(Book inventory)
+	void ArrayToFile(fstream &bookList)
 	{
 		cout << "What file would you like to save your book list in(no spaces please)?";
 		string fileName;
@@ -51,23 +73,23 @@ public:
 			NewBookList << inventory[i].getDate << "\t\n";
 		}
 	}
-	void sortBytitle (Book array[], int size) {
-    int startScan, minIndex;
-    string minValue;
-    for (startScan = 0; startScan < (size − 1); startScan++) {
-        minIndex = startScan;
-        minValue = book[startScan].getTitle;
-        for(int index = startScan + 1; index < size; index++) {
-            if (book[index].getTitle < minValue) {
-                minValue = array[index].getTitle;
-                minIndex = index; }
-        }
-        Book[minIndex].getTitle = array[startScan].getTitle;
-        array[startScan].getTitle = minValue;
-    } }
-
-
-void sortByquantity (Book array[], int size) {
+	void sortBytitle () {
+		int startScan, minIndex;
+		string minValue;
+		for (startScan = 0; startScan < (size − 1); startScan++) {
+			minIndex = startScan;
+			minValue = book[startScan].getTitle;
+		}
+		for(int index = startScan + 1; index < size; index++) {
+			if (book[index].getTitle < minValue) {
+				minValue = array[index].getTitle;
+				minIndex = index; }
+		}
+		Book[minIndex].getTitle = array[startScan].getTitle;
+		array[startScan].getTitle = minValue;
+	}
+	
+void sortByquantity () {
     int startScan, minIndex;
     int minValue;
     for (startScan = 0; startScan < (size − 1); startScan++) {
@@ -83,14 +105,14 @@ void sortByquantity (Book array[], int size) {
     } }
 
 
-void sortBydate (Book array[], int size) {
+void sortByAge () {
     int startScan, minIndex;
-    int minValue;
+    Date minValue;
     for (startScan = 0; startScan < (size − 1); startScan++) {
         minIndex = startScan;
         minValue = book[startScan].getDate;
         for(int index = startScan + 1; index < size; index++) {
-            if (book[index].getDate < minValue) {
+            if (book[index].getDate < minValue) {    //////////////////////////	OVERLOADED CONSTRUCTOR OF "<" FOR DATE DATA TYPE!!!
                 minValue = array[index].getDate;
                 minIndex = index; }
         }
@@ -99,7 +121,7 @@ void sortBydate (Book array[], int size) {
     } }
 
 
-void sortByretailprice (Book array[], int size) {
+void sortByRetailPrice () {
     int startScan, minIndex;
     double minValue;
     for (startScan = 0; startScan < (size − 1); startScan++) {
@@ -116,7 +138,7 @@ void sortByretailprice (Book array[], int size) {
 
 
 
-void sortBywholesaleprice (Book array[], int size) {
+void sortByWholesalePrice () {
     int startScan, minIndex;
     double minValue;
     for (startScan = 0; startScan < (size − 1); startScan++) {
@@ -131,9 +153,9 @@ void sortBywholesaleprice (Book array[], int size) {
         array[startScan].getWholesaleprice = minValue;
     } }
 
-void sortByauthor (Book array[], int size) {
+void sortByAuthor () {
     int startScan, minIndex;
-    sting minValue;
+    string minValue;
     for (startScan = 0; startScan < (size − 1); startScan++) {
         minIndex = startScan;
         minValue = book[startScan].getAuthor;
@@ -146,9 +168,9 @@ void sortByauthor (Book array[], int size) {
         array[startScan].getAuthor = minValue;
     } }
 
-void sortByISBN (Book array[], int size) {
+void sortByISBN () {
     int startScan, minIndex;
-    double minValue;
+    unsigned long long int minValue;
     for (startScan = 0; startScan < (size − 1); startScan++) {
         minIndex = startScan;
         minValue = book[startScan].getISBN;
