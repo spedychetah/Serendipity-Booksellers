@@ -51,8 +51,8 @@ public:
 			bookList >> inventory[i].setWholesale;
 			bookList >> inventory[i].setRetail;
 			bookList >> inventory[i].setDate;
-		} //OR: Until you hit '\n', continue to read in values. These eight set values will be used for Book One.
-			//Then. move on to the next line of the file, and read until '\n' again, assigning these new values to our 8 variables.
+		} //OR: Until you hit '\t', read in a value(including spaces). Every eight set values will be one Book.
+			//Then the next eight are the next book.
 	}
 	void ArrayToFile(fstream &bookList)
 	{
