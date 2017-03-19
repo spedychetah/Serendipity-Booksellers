@@ -12,23 +12,59 @@ class Inventory
 private:
 	int arrsize = 100;
 	Book inventory[arrsize];
+	int numBooks;
 public:
-	InventoryModule(){}
-	void setArraySize(int);
+	InventoryModule()
+	{
+		numBooks = 0;
+		FileToArray();
+		
+	}
+	~InventoryModule()
+	{
+		ArrayToFile();
+	}
 	void inventoryDriver()
 	{
-		int choice;
+		int choice1, choice2, searchValue, index;
+		char findAnother;
 		do{
-			choice = displayInvenu();
-			if(choice == 1)
+			choice1 = displayInvenu();
+			if(choice1 == 1){
+				do{
+				cout << "Do you want to look up the book by 1)Title or 2)ISBN? \nEnter your choice: ";
+				cin >> choice2;
+				if (choice2 == 1){
+					cout << "Please enter the book title: ";
+					cin >> searchValue;
+					index = searchByTitle(searchValue);
+					displayABook(index);
+				}
+				else if (choice2 == 2){
+					cout << "Please enter the book ISBN: ";
+					cin >> searchValue;
+					index = searchByAuthor(searchValue); //<- enter isbn and search by author? WRONG!
+					displayABook(index);
+				}
+				else {
+					cout << "Invalid entry. Please try again.\n"; }
+					
+				cout << "\n\nDo you wish to look up another book? y/n: ";
+				cin >> findAnother;
+				} while((choice2 != 1 && choice2 != 2) || findAnother == 'y');
+			}
 			if (choice == 2)
+				editBook();
 			if (choice == 3)
+				addBook();
 			if (choice == 4)
+				deleteBook();		
 		}while(choice != 5);
+		cout << "\n\nLeaving Inventory Menu and returning to Main Menu..."
 	}
 	int displayInvenu(){
 		int entry;
-		cout << "Inventory Database Menu:\n";
+		cout << "\n\n\n\nInventory Database Menu:\n";
 		cout << "1) Look up a book\n";
 		cout << "2) Edit a book\n";
 		cout << "3) Add a book\n";
@@ -36,14 +72,19 @@ public:
 		cout << "5) Return to Main Menu\n";
 		cout << "Enter your choice: ";
 		cin >> entry;
+		return entry;
 	}
-	void FileToArray(fstream &bookList)
+	void FileToArray()
 	{
-		bookList.open("Booklist.txt");
+		fstream bookList;
+		string inputFileName;
+		cout << "Please enter the path to the input text file: ";
+		cin >> inputFileName;
+		bookList.open(inputFileName);
 		//need to skip the first line before readings(headings)
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < arrsize; i++)
 		{
-			bookList >> inventory[i].setTitle;
+			getline(Booklist, inventory[i].setTitle, '\t') ; //test prototype- check by the book
 			bookList >> inventory[i].setAuthor;
 			bookList >> inventory[i].setPublisher;
 			bookList >> inventory[i].setISBN;
@@ -51,28 +92,30 @@ public:
 			bookList >> inventory[i].setWholesale;
 			bookList >> inventory[i].setRetail;
 			bookList >> inventory[i].setDate;
+			numBooks++
 		} //OR: Until you hit '\t', read in a value(including spaces). Every eight set values will be one Book.
 			//Then the next eight are the next book.
 	}
-	void ArrayToFile(fstream &bookList)
+	void ArrayToFile()
 	{
-		cout << "What file would you like to save your book list in(no spaces please)?";
+		fstream UpdatedBookList;
+		cout << "What file would you like to save your book list into?";
 		string fileName;
 		cin >> fileName;
-		ofstream NewBookList(fileName);
+		UpdatedBookList.open(fileName);
 		for (int i = 0; i < 100; i++)
 		{
-			NewBookList << "Title\tAuthor\tPublisher\tISBN\tQuantity\tWholesale\tRetail\tDate\n";
-			NewBookList << inventory[i].getTitle << "\t";
-			NewBookList << inventory[i].getAuthor << "\t";
-			NewBookList << inventory[i].getPublisher << "\t";
-			NewBookList << inventory[i].getISBN << "\t";
-			NewBookList << inventory[i].getQuantity << "\t";
-			NewBookList << inventory[i].getWholesale << "\t";
-			NewBookList << inventory[i].getRetail << "\t";
-			inventory[i].getDate << "\t\n"; //couts date(dd/mm/yyyy)
+			UpdatedBookList << inventory[i].getTitle << "\t";
+			UpdatedBookList << inventory[i].getAuthor << "\t";
+			UpdatedBookList << inventory[i].getPublisher << "\t";
+			UpdatedBookList << inventory[i].getISBN << "\t";
+			UpdatedBookList << inventory[i].getQuantity << "\t";
+			UpdatedBookList << inventory[i].getWholesale << "\t";
+			UpdatedBookList << inventory[i].getRetail << "\t";
+			UpdatedBookList << inventory[i].getDate << "\t\n"; //couts date(dd/mm/yyyy)
 		}
 	}
+	void sortBook(char type){} //-> Still working on it!!
 	void sortBytitle () {
 		int startScan, minIndex;
 		string minValue;
@@ -88,7 +131,6 @@ public:
 		Book[minIndex].getTitle = array[startScan].getTitle;
 		array[startScan].getTitle = minValue;
 	}
-	
 void sortByquantity () {
     int startScan, minIndex;
     int minValue;
@@ -102,9 +144,8 @@ void sortByquantity () {
         }
         Book[minIndex].getQuantity = array[startScan].getQuantity;
         array[startScan].getQuantity = minValue;
-    } }
-
-
+    } 
+}
 void sortByAge () {
     int startScan, minIndex;
     Date minValue;
@@ -118,9 +159,8 @@ void sortByAge () {
         }
         Book[minIndex].getDate = array[startScan].getDate;
         array[startScan].getDate = minValue;
-    } }
-
-
+    }
+}
 void sortByRetailPrice () {
     int startScan, minIndex;
     double minValue;
@@ -134,10 +174,8 @@ void sortByRetailPrice () {
         }
         Book[minIndex].getRetailprice = array[startScan].getRetailprice;
         array[startScan].getRetailprice = minValue;
-    } }
-
-
-
+    } 
+}
 void sortByWholesalePrice () {
     int startScan, minIndex;
     double minValue;
@@ -151,8 +189,8 @@ void sortByWholesalePrice () {
         }
         Book[minIndex].getWholesaleprice = array[startScan].getWholesaleprice;
         array[startScan].getWholesaleprice = minValue;
-    } }
-
+    } 
+}
 void sortByAuthor () {
     int startScan, minIndex;
     string minValue;
@@ -166,8 +204,8 @@ void sortByAuthor () {
         }
         Book[minIndex].getAuthor = array[startScan].getAuthor;
         array[startScan].getAuthor = minValue;
-    } }
-
+    } 
+}
 void sortByISBN () {
     int startScan, minIndex;
     unsigned long long int minValue;
@@ -182,25 +220,45 @@ void sortByISBN () {
         Book[minIndex].getISBN = array[startScan].getISBN;
         array[startScan].getISBN = minValue;
     } 
-	int inventory::binarySearch(int  array[], int numElems, int value)
-{
-	int first = 0,
-		last = numElems - 1, middle, position = -1;
+}
+	int searchByTitle(string title)
+	{
+	int first = 0, last = numBooks - 1, middle, position = -1;
 	bool found = false;
-	while (!found&&first <= last)
+	while (!found && first <= last)
 	{
 		middle = (first + last) / 2;
-			if (array[middle] == value)
-			{
-				found = true;
-				position = middle;
-			}
-			else if (array[middle] > value)
-				last = middle - 1;
-			else first = middle + 1;
+		if (inventory[middle].title == title)
+		{
+			found = true;
+			position = middle;
+		}
+		else if (inventory[middle].title > value)
+			last = middle - 1;
+		else first = middle + 1;
 	}
 	return position;
-}
+	}
+	
+	int searchByAuthor(string author)
+	{
+	int first = 0, last = numBooks - 1, middle, position = -1;
+	bool found = false;
+	while (!found && first <= last)
+	{
+		middle = (first + last) / 2;
+		if (inventory[middle].author == author)
+		{
+			found = true;
+			position = middle;
+		}
+		else if (inventory[middle].author > value)
+			last = middle - 1;
+		else first = middle + 1;
+	}
+	return position;
+	}
+	
 	void Lookupbook();
 	 void Addbook();
 	 void Deletebook();
