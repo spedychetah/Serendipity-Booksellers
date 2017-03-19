@@ -70,7 +70,7 @@ public:
 			NewBookList << inventory[i].getQuantity << "\t";
 			NewBookList << inventory[i].getWholesale << "\t";
 			NewBookList << inventory[i].getRetail << "\t";
-			NewBookList << inventory[i].getDate << "\t\n";
+			inventory[i].getDate << "\t\n"; //couts date(dd/mm/yyyy)
 		}
 	}
 	void sortBytitle () {
